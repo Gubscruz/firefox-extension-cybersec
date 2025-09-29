@@ -30,9 +30,9 @@ Firefox MV3 support is still in progress. If you hit issues with the `background
 
 1. Changing `"manifest_version": 2` in `manifest.json`.
 2. Replacing the background block with:
-	 ```json
-	 "background": { "scripts": ["src/background.js"], "persistent": false }
-	 ```
+   ```json
+   "background": { "scripts": ["src/background.js"], "persistent": false }
+   ```
 3. Adjusting any API differences as needed.
 
 For now this minimal setup should work for local experimentation.
