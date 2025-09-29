@@ -17,7 +17,18 @@
     "open_in_tab": true
   },
   "background": {
-    "scripts": ["src/background/background.js"],
+    "scripts": [
+      "src/rules/tracker_data.js",
+      "src/background/domainUtils.js",
+      "src/background/storage.js",
+      "src/background/score.js",
+      "src/background/cookieSyncDetector.js",
+      "src/background/requestClassifier.js",
+      "src/background/rulesEngine.js",
+      "src/background/hijackDetector.js",
+      "src/background/messaging.js",
+      "src/background/background.js"
+    ],
     "persistent": true
   },
   "content_scripts": [
