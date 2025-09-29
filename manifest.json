@@ -1,18 +1,45 @@
 {
-  "manifest_version": 3,
-  "name": "CyberSec Hello World",
-  "version": "0.1.0",
-  "description": "Base Firefox extension that says Hello World.",
-  "action": {
-    "default_title": "CyberSec HW",
-    "default_popup": "src/popup.html"
-  },
+  "manifest_version": 2,
+  "name": "Privacy Shield A+",
+  "version": "1.0.0",
+  "description": "Advanced privacy & anti-tracking extension: blocks trackers, detects cookie syncing, canvas fingerprinting, hijack indicators, and scores site privacy.",
   "icons": {
-    "48": "assets/icon-48.png",
-    "96": "assets/icon-96.png"
+    "16": "src/assets/icon-16.png",
+    "48": "src/assets/icon-48.png",
+    "128": "src/assets/icon-128.png"
+  },
+  "browser_action": {
+    "default_title": "Privacy Shield",
+    "default_popup": "src/ui/popup.html"
+  },
+  "options_ui": {
+    "page": "src/ui/options.html",
+    "open_in_tab": true
   },
   "background": {
-    "scripts": ["src/background.js"]
+    "scripts": ["src/background/background.js"],
+    "persistent": true
   },
-  "permissions": []
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content/contentProbe.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "webNavigation",
+    "cookies",
+    "storage",
+    "activeTab",
+    "tabs",
+    "<all_urls>"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "privacy-shield@example.com"
+    }
+  }
 }

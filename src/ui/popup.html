@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Privacy Shield</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <h1 id="site"></h1>
+    <div id="scoreContainer"><span id="score">--</span></div>
+  </header>
+  <section id="alerts" class="hidden"></section>
+  <section>
+    <h2>Requests</h2>
+    <div id="requestsSummary"></div>
+    <ul id="blockedList"></ul>
+  </section>
+  <section>
+    <h2>Cookies</h2>
+    <div id="cookiesSummary"></div>
+  </section>
+  <section>
+    <h2>Storage</h2>
+    <div id="storageSummary"></div>
+  </section>
+  <section>
+    <button id="toggleBlock"></button>
+    <button id="tempAllow"></button>
+    <button id="openReport">Open Detailed Report</button>
+  </section>
+  <details id="breakdown"><summary>Score Breakdown</summary><ul id="scoreItems"></ul></details>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>

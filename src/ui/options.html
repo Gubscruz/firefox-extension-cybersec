@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Privacy Shield Options</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <h1>Privacy Shield – Options</h1>
+  <section>
+    <h2>Global Settings</h2>
+    <label><input type="checkbox" id="enabled"/> Enable extension</label><br>
+    <label><input type="checkbox" id="deepCheck"/> Deep cookie sync check (may compare raw values)</label>
+  </section>
+  <section>
+    <h2>Custom Rules</h2>
+    <div class="flex">
+      <input id="ruleInput" placeholder="example.com or *.example.com or regex:/pattern/" />
+      <button id="addRule">Add</button>
+    </div>
+    <div class="columns">
+      <div>
+        <h3>Allow List</h3>
+        <ul id="allowList"></ul>
+      </div>
+      <div>
+        <h3>Block List</h3>
+        <ul id="blockList"></ul>
+      </div>
+      <div>
+        <h3>Regex List</h3>
+        <ul id="regexList"></ul>
+      </div>
+    </div>
+    <div class="importExport">
+      <button id="exportRules">Export JSON</button>
+      <input type="file" id="importFile" style="display:none" accept="application/json" />
+      <button id="importRules">Import JSON</button>
+    </div>
+  </section>
+  <section>
+    <h2>Permissions Rationale</h2>
+    <p>This extension inspects network requests to block trackers (webRequest), analyzes cookies and storage, and detects potential fingerprinting and hijack indicators. No data leaves your browser.</p>
+  </section>
+  <script type="module" src="options.js"></script>
+</body>
+</html>

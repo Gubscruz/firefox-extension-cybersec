@@ -1,0 +1,9 @@
+body{font:14px system-ui,Arial,sans-serif;margin:0;background:#0d1117;color:#e6edf3}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#161b22;border-bottom:1px solid #30363d}
+h1{font-size:18px;margin:0;flex:1}
+select,button{background:#161b22;border:1px solid #30363d;color:#e6edf3;padding:6px 10px;border-radius:4px}
+button{background:#238636;border:0}
+button:hover{background:#2ea043}
+#eventsTable{width:100%;border-collapse:collapse;font-size:12px}
+#eventsTable th,#eventsTable td{padding:6px 8px;border-bottom:1px solid #21262d;vertical-align:top}
+#eventsTable tbody tr:hover{background:#1c2128}

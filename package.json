@@ -1,0 +1,14 @@
+{
+  "name": "privacy-shield-extension",
+  "version": "1.0.0",
+  "description": "Advanced privacy & anti-tracking Firefox WebExtension (Manifest V2).",
+  "scripts": {
+    "start:ff": "web-ext run --source-dir . --firefox=firefox",
+    "build": "web-ext build --source-dir . --overwrite-dest",
+    "lint": "echo 'Add ESLint if desired'"
+  },
+  "devDependencies": {
+    "web-ext": "^8.0.0"
+  },
+  "license": "MIT"
+}
