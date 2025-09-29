@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "CyberSec Hello World",
+  "version": "0.1.0",
+  "description": "Base Firefox extension that says Hello World.",
+  "action": {
+    "default_title": "CyberSec HW",
+    "default_popup": "src/popup.html"
+  },
+  "icons": {
+    "48": "assets/icon-48.png",
+    "96": "assets/icon-96.png"
+  },
+  "background": {
+    "scripts": ["src/background.js"]
+  },
+  "permissions": []
+}
