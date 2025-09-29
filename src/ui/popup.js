@@ -71,7 +71,8 @@ async function init() {
     }
 
     document.getElementById('openReport').addEventListener('click', () => {
-        browser.tabs.create({ url: browser.runtime.getURL('src/ui/report.html') + `?site=${encodeURIComponent(summary.etld1 || '')}` });
+        const urlEtld1 = uiGetETLD1(uiGetHost(tab.url));
+        browser.tabs.create({ url: browser.runtime.getURL('src/ui/report.html') + `?site=${encodeURIComponent(urlEtld1)}` });
     });
     document.getElementById('toggleBlock').textContent = 'Toggle Block (stub)';
     document.getElementById('tempAllow').textContent = 'Temp Allow (stub)';
