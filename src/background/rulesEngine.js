@@ -29,6 +29,13 @@ self.isTracker = function isTracker(host) {
 self.shouldBlock = async function shouldBlock(host, topSite) {
     const rules = await loadRules();
     if (!rules.enabled) return false;
+    // Per-site full disable
+    if (rules.site && rules.site.disabled && rules.site.disabled.includes(topSite)) return false;
+    // Temporary allow window for this site?
+    if (rules.site && rules.site.tempAllows) {
+        const until = rules.site.tempAllows[topSite];
+        if (until && Date.now() < until) return false; // skip blocking while temp allow active
+    }
     const h = host.toLowerCase();
     // allow overrides first
     if (rules.allow && rules.allow.some(p => hostMatchesPattern(h, p))) return false;

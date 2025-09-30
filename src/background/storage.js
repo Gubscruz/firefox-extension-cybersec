@@ -43,14 +43,20 @@ self.getAllSiteSummaries = async function getAllSiteSummaries() {
 
 self.loadRules = async function loadRules() {
     const data = await _get('rules:user');
-    if (!data) return {
+    const base = {
         enabled: true,
         deepCookieSyncCheck: false,
         allow: [],
         block: [],
-        regex: []
+        regex: [],
+        site: { disabled: [], tempAllows: {} } // disabled: list of etld1; tempAllows: {etld1: expiryTs}
     };
-    return data;
+    if (!data) return base;
+    // normalize missing fields for backward compatibility
+    if (!data.site) data.site = { disabled: [], tempAllows: {} };
+    if (!data.site.disabled) data.site.disabled = [];
+    if (!data.site.tempAllows) data.site.tempAllows = {};
+    return Object.assign(base, data);
 }
 self.saveRules = async function saveRules(rules) {
     await _set({ 'rules:user': rules });

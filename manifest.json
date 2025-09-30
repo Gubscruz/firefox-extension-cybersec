@@ -34,7 +34,10 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["src/content/contentProbe.js"],
+      "js": [
+        "src/content/contentProbe.js",
+        "src/content/canvasHook.js"
+      ],
       "run_at": "document_start"
     }
   ],

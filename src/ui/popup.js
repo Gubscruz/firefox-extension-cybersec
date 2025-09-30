@@ -61,7 +61,7 @@ async function init() {
     }
     // alerts
     const alerts = [];
-    if (summary.canvas?.suspect) alerts.push('Canvas FP');
+    if (summary.canvasFingerprint?.suspect) alerts.push('Canvas FP');
     if ((summary.cookieSync || []).length) alerts.push('Cookie Sync');
     if (summary.hijack?.suspect) alerts.push('Hijack');
     if (alerts.length) {
@@ -74,8 +74,33 @@ async function init() {
         const urlEtld1 = uiGetETLD1(uiGetHost(tab.url));
         browser.tabs.create({ url: browser.runtime.getURL('src/ui/report.html') + `?site=${encodeURIComponent(urlEtld1)}` });
     });
-    document.getElementById('toggleBlock').textContent = 'Toggle Block (stub)';
-    document.getElementById('tempAllow').textContent = 'Temp Allow (stub)';
+    const siteEtld1 = uiGetETLD1(uiGetHost(tab.url));
+    const toggleBtn = document.getElementById('toggleBlock');
+    const tempBtn = document.getElementById('tempAllow');
+    // Initialize labels by querying rules state indirectly (ask background for SCORE_REQUEST includes no direct rule info; fetch rules directly)
+    const rules = await browser.storage.local.get('rules:user');
+    let disabled = false; let tempUntil = null;
+    if (rules['rules:user']) {
+        const r = rules['rules:user'];
+        disabled = !!(r.site && r.site.disabled && r.site.disabled.includes(siteEtld1));
+        if (r.site && r.site.tempAllows) {
+            const until = r.site.tempAllows[siteEtld1];
+            if (until && Date.now() < until) tempUntil = until;
+        }
+    }
+    function setToggleLabel() { toggleBtn.textContent = disabled ? 'Enable Blocking (This Site)' : 'Disable Blocking (This Site)'; }
+    function setTempLabel() { tempBtn.textContent = tempUntil ? 'Clear Temp Allow' : 'Temp Allow 5m'; }
+    setToggleLabel(); setTempLabel();
+    toggleBtn.addEventListener('click', async () => {
+        const resp = await browser.runtime.sendMessage({ type: 'SITE_TOGGLE_BLOCK', etld1: siteEtld1 });
+        disabled = resp.disabled;
+        setToggleLabel();
+    });
+    tempBtn.addEventListener('click', async () => {
+        const resp = await browser.runtime.sendMessage({ type: 'SITE_TEMP_ALLOW', etld1: siteEtld1 });
+        tempUntil = resp.tempAllowed ? resp.until : null;
+        setTempLabel();
+    });
 }
 
 document.addEventListener('DOMContentLoaded', init);
