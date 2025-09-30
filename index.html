@@ -1,0 +1,87 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Canvas FP Demo</title>
+<body style="background:#111;color:#eee;font-family:system-ui">
+  <h1>Canvas FP Harness</h1>
+  <p>Runs common FP patterns: rapid measureText, toDataURL bursts, hidden/offscreen canvas, getImageData.</p>
+  <pre id="log"></pre>
+  <script>
+    const log = (...a) => (document.getElementById('log').textContent += a.join(' ') + '\n');
+
+    // 1) Hidden/offscreen canvas
+    const hidden = document.createElement('canvas');
+    hidden.width = 200; hidden.height = 50;
+    hidden.style.display = 'none';
+    document.body.appendChild(hidden);
+    const hctx = hidden.getContext('2d');
+    hctx.font = '16px Arial';
+    hctx.fillText('fingerprint-probe-αβγ', 10, 30);
+
+    // 2) Burst of measureText calls (typical entropy sampling)
+    function spamMeasureText(ctx, loops=200) {
+      const fonts = ['16px Arial','16px Courier New','15.5px Times','17px "Noto Sans"','16px "Segoe UI"'];
+      const strings = ['abcdEFGH', 'fingerprint', 'Cañón', 'Лобачевский', '測定', '😀🔥'];
+      let cnt = 0;
+      const t0 = performance.now();
+      for (let i=0;i<loops;i++) {
+        ctx.font = fonts[i % fonts.length];
+        const m = ctx.measureText(strings[i % strings.length]);
+        cnt += (m.width || 0);
+      }
+      const dt = performance.now() - t0;
+      log(`[measureText] loops=${loops} time=${dt.toFixed(2)}ms sumWidth=${cnt.toFixed(2)}`);
+    }
+
+    // 3) Rapid getImageData reads (another fingerprint signal)
+    function spamGetImageData(ctx, reads=10) {
+      for (let i=0;i<reads;i++) {
+        const img = ctx.getImageData(0, 0, 100, 20);
+      }
+      log(`[getImageData] reads=${reads}`);
+    }
+
+    // 4) Burst of toDataURL calls (classic)
+    function burstToDataURL(c, n=10) {
+      let len = 0;
+      for (let i=0;i<n;i++) {
+        const d = c.toDataURL();
+        len += d.length;
+      }
+      log(`[toDataURL] calls=${n} totalLen=${len}`);
+    }
+
+    // 5) Also test OffscreenCanvas if supported (some FP libs use it)
+    async function testOffscreen() {
+      if (!('OffscreenCanvas' in window)) { log('[offscreen] not supported'); return; }
+      const oc = new OffscreenCanvas(120, 30);
+      const octx = oc.getContext('2d');
+      octx.font = '16px Arial'; octx.fillStyle = '#0f0';
+      octx.fillText('offscreen-fp', 5, 20);
+      // Note: OffscreenCanvas → convertToBlob, not toDataURL
+      const blob = await oc.convertToBlob();
+      log(`[offscreen] convertToBlob size≈${blob.size} bytes`);
+    }
+
+    // Draw a bit so getImageData/toDataURL have pixels
+    hctx.fillStyle = '#0af';
+    for (let i=0;i<40;i++) {
+      hctx.fillRect(5*i%200, (i*3)%50, 10, 3);
+    }
+
+    // Run the probes
+    spamMeasureText(hctx, 250);
+    spamGetImageData(hctx, 15);
+    burstToDataURL(hidden, 12);
+    testOffscreen();
+
+    // 6) A visible canvas too (some detectors care about visibility)
+    const vis = document.createElement('canvas');
+    vis.width = 300; vis.height = 80;
+    document.body.appendChild(vis);
+    const vctx = vis.getContext('2d');
+    vctx.font = '24px Georgia';
+    vctx.fillStyle = '#e91';
+    vctx.fillText('visible-canvas', 10, 40);
+    burstToDataURL(vis, 8);
+  </script>
+</body>
