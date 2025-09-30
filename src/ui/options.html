@@ -18,7 +18,7 @@
       <input id="ruleInput" placeholder="example.com or *.example.com or regex:/pattern/" />
       <button id="addRule">Add</button>
     </div>
-    <div class="columns">
+    <!-- <div class="columns">
       <div>
         <h3>Allow List</h3>
         <ul id="allowList"></ul>
@@ -36,6 +36,28 @@
       <button id="exportRules">Export JSON</button>
       <input type="file" id="importFile" style="display:none" accept="application/json" />
       <button id="importRules">Import JSON</button>
+    </div> -->
+  </section>
+  <section>
+    <h2>Personal Lists</h2>
+    <div class="flex" style="margin-bottom:6px;gap:6px;flex-wrap:wrap;">
+      <input id="newListName" placeholder="New list name" />
+      <button id="createList">Create List</button>
+      <select id="listSelect"></select>
+      <label style="display:flex;align-items:center;gap:4px;">
+        <input type="checkbox" id="listEnabled"/> Enabled
+      </label>
+    </div>
+    <div class="flex" style="gap:6px;">
+      <input id="listPatternInput" placeholder="Add domain or *.domain.com" />
+      <button id="addListPattern">Add Pattern</button>
+      <button id="removeList" style="margin-left:auto;">Delete List</button>
+    </div>
+    <ul id="listPatterns" class="patternList"></ul>
+    <div class="importExport" style="margin-top:8px;">
+      <button id="exportLists">Export Lists JSON</button>
+      <input type="file" id="importListsFile" style="display:none" accept="application/json" />
+      <button id="importLists">Import Lists JSON</button>
     </div>
   </section>
   <section>

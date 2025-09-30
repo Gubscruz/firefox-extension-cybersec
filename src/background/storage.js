@@ -49,13 +49,15 @@ self.loadRules = async function loadRules() {
         allow: [],
         block: [],
         regex: [],
-        site: { disabled: [], tempAllows: {} } // disabled: list of etld1; tempAllows: {etld1: expiryTs}
+        site: { disabled: [], tempAllows: {} }, // disabled: list of etld1; tempAllows: {etld1: expiryTs}
+        customLists: {} // { listName: { enabled: true, patterns: [] } }
     };
     if (!data) return base;
     // normalize missing fields for backward compatibility
     if (!data.site) data.site = { disabled: [], tempAllows: {} };
     if (!data.site.disabled) data.site.disabled = [];
     if (!data.site.tempAllows) data.site.tempAllows = {};
+    if (!data.customLists || typeof data.customLists !== 'object') data.customLists = {};
     return Object.assign(base, data);
 }
 self.saveRules = async function saveRules(rules) {

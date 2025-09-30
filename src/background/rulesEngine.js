@@ -39,8 +39,16 @@ self.shouldBlock = async function shouldBlock(host, topSite) {
     const h = host.toLowerCase();
     // allow overrides first
     if (rules.allow && rules.allow.some(p => hostMatchesPattern(h, p))) return false;
-    // block overrides
+    // block overrides (direct block list)
     if (rules.block && rules.block.some(p => hostMatchesPattern(h, p))) return true;
+    // custom list patterns (any enabled custom list)
+    if (rules.customLists) {
+        for (const name of Object.keys(rules.customLists)) {
+            const list = rules.customLists[name];
+            if (!list || list.enabled === false || !Array.isArray(list.patterns)) continue;
+            if (list.patterns.some(p => hostMatchesPattern(h, p))) return true;
+        }
+    }
     // regex overrides
     if (rules.regex) {
         for (const r of rules.regex) {
